@@ -160,6 +160,47 @@
 
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData', formData);
+
+      /* fetch current price of thisProduct */
+      let price = thisProduct.data.price;
+      console.log('Current price: ', price);
+      /* START LOOP: for each param */
+      const params = dataSource.products[thisProduct.id].params;
+      console.log('Params: ', params);
+      for(let param in params)
+      {
+        /* START LOOP: for each option */
+        const options = dataSource.products[thisProduct.id].params[param].options;
+        console.log('Options of ' + param + ':', options);
+        for(let option in options)
+        {
+          /* Check if option is checked*/
+          const isDefault = dataSource.products[thisProduct.id].params[param].options[option].default;
+          const optionPrice = dataSource.products[thisProduct.id].params[param].options[option].price;
+          console.log('formData: ', formData[param]);
+          if(formData.hasOwnProperty(param) && formData[param].indexOf(option) > -1)
+          {
+            /* Check if option is not default */
+            if(!isDefault)
+            {
+              price = price + optionPrice;
+            }
+          }
+          else
+          {
+            /* Check if not checked option is default */
+            if(isDefault)
+            {
+              price = price - optionPrice;
+            }
+          }
+        /* END LOOP: for each option */
+        }
+      /* END LOOP: for each param */
+      }
+      /* Update current price*/
+      console.log('Final price: ', price);
+      thisProduct.priceElem.innerHTML = price;
     }
 
   }
