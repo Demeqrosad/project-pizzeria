@@ -65,6 +65,7 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
 
 
@@ -98,6 +99,7 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAccordion()
@@ -155,30 +157,41 @@
       });
     }
 
+    initAmountWidget()
+    {
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('update', function()
+      {
+        thisProduct.processOrder();
+      });
+    }
+
     processOrder()
     {
       const thisProduct = this;
 
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      //console.log('formData', formData);
 
       /* fetch current price of thisProduct */
       let price = thisProduct.data.price;
-      console.log('Current price: ', price);
+      //console.log('Current price: ', price);
       /* START LOOP: for each param */
       const params = dataSource.products[thisProduct.id].params;
-      console.log('Params: ', params);
+      //console.log('Params: ', params);
       for(let param in params)
       {
         /* START LOOP: for each option */
         const options = dataSource.products[thisProduct.id].params[param].options;
-        console.log('Options of ' + param + ':', options);
+        //console.log('Options of ' + param + ':', options);
         for(let option in options)
         {
           /* Check if option is checked*/
           const isDefault = dataSource.products[thisProduct.id].params[param].options[option].default;
           const optionPrice = dataSource.products[thisProduct.id].params[param].options[option].price;
-          console.log('formData: ', formData[param]);
+          //console.log('formData: ', formData[param]);
           const isChecked = (formData.hasOwnProperty(param) && formData[param].indexOf(option) > -1);
           if(isChecked)
           {
@@ -197,7 +210,7 @@
             }
           }
           const images = thisProduct.imageWrapper.querySelectorAll('.' + param + '-' + option);
-          console.log('Images: ', images);
+          //console.log('Images: ', images);
           if(isChecked)
           {
             for(let image of images)
@@ -217,10 +230,90 @@
       /* END LOOP: for each param */
       }
       /* Update current price*/
-      console.log('Final price: ', price);
+      //console.log('Final price: ', price);
+      /* Multiply price by amount */
+      price *= thisProduct.amountWidget.value;
       thisProduct.priceElem.innerHTML = price;
     }
 
+  }
+
+  class AmountWidget
+  {
+    constructor(element)
+    {
+      const thisWidget = this;
+
+      thisWidget.getElements(element);
+      thisWidget.value = settings.amountWidget.defaultValue;
+      thisWidget.setValue(thisWidget.value);
+      thisWidget.initActions();
+      console.log('AmountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
+    }
+
+    getElements(element)
+    {
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value)
+    {
+      const thisWidget = this;
+
+      const newValue = parseInt(value);
+      const oldValue = parseInt(thisWidget.value);
+
+      /* TODO Add validation */
+
+      if(newValue != oldValue && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax)
+      {  
+        thisWidget.value = newValue;
+        thisWidget.announce();
+      }
+      thisWidget.input.value = thisWidget.value;
+    }
+
+    initActions()
+    {
+      const thisWidget = this;
+
+      //const oldValue = parseInt(thisWidget.input.value);
+      thisWidget.input.addEventListener('change', function()
+      {
+        const newValue = parseInt(thisWidget.input.value);
+        thisWidget.setValue(newValue);
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function(event)
+      {
+        event.preventDefault();
+        const oldValue = parseInt(thisWidget.input.value);
+        const newValue = oldValue - 1;
+        thisWidget.setValue(newValue);
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function(event)
+      {
+        event.preventDefault();
+        const oldValue = parseInt(thisWidget.input.value);
+        const newValue = oldValue + 1;
+        thisWidget.setValue(newValue);
+      });
+    }
+
+    announce()
+    {
+      const thisWidget = this;
+
+      const event = new Event('update');
+      thisWidget.element.dispatchEvent(event);
+    }
   }
 
   const app = {
@@ -228,7 +321,7 @@
     {
       const thisApp = this;
 
-      console.log('thisApp.data: ', thisApp.data);
+      //console.log('thisApp.data: ', thisApp.data);
 
       for(let productData in thisApp.data.products)
       {
