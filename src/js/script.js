@@ -97,6 +97,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion()
@@ -178,7 +179,8 @@
           const isDefault = dataSource.products[thisProduct.id].params[param].options[option].default;
           const optionPrice = dataSource.products[thisProduct.id].params[param].options[option].price;
           console.log('formData: ', formData[param]);
-          if(formData.hasOwnProperty(param) && formData[param].indexOf(option) > -1)
+          const isChecked = (formData.hasOwnProperty(param) && formData[param].indexOf(option) > -1);
+          if(isChecked)
           {
             /* Check if option is not default */
             if(!isDefault)
@@ -192,6 +194,22 @@
             if(isDefault)
             {
               price = price - optionPrice;
+            }
+          }
+          const images = thisProduct.imageWrapper.querySelectorAll('.' + param + '-' + option);
+          console.log('Images: ', images);
+          if(isChecked)
+          {
+            for(let image of images)
+            {
+              image.classList.add(classNames.menuProduct.imageVisible);
+            }
+          }
+          else
+          {
+            for(let image of images)
+            {
+              image.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
         /* END LOOP: for each option */
