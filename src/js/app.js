@@ -30,16 +30,12 @@ const app = {
       })
       .then(function(parseResponse)
       {
-        console.log('parseResponse', parseResponse);
-
         /* save parseResponse as thisApp.data.products */
         thisApp.data.products = parseResponse;
 
         /* execute initMenu method */
         thisApp.initMenu();
       });
-
-    console.log('thisApp.data', JSON.stringify(thisApp.data));
   },
 
   initCart: function()
@@ -57,6 +53,60 @@ const app = {
     });
   },
 
+  initPages: function()
+  {
+    const thisApp = this;
+
+    thisApp.pages = Array.from(document.querySelector(select.containerOf.pages).children);
+    thisApp.navLinks = Array.from(document.querySelectorAll(select.nav.links));
+
+    let pagesMatchingHash = [];
+    if(window.location.hash.length > 2)
+    {
+      const idFromHash = window.location.hash.replace('#', '').replace('/', '');
+
+      pagesMatchingHash = thisApp.pages.filter(function(page)
+      {
+        return page.id == idFromHash;
+      });
+
+    }
+
+    thisApp.activatePage(pagesMatchingHash.length ? pagesMatchingHash[0].id : thisApp[0].id);
+    //thisApp.activatePage(thisApp.pages[0].id);
+
+    for(let link of thisApp.navLinks)
+    {
+      link.addEventListener('click', function(event)
+      {
+        const clickedElement = this;
+        event.preventDefault();
+
+        /* TODO: get page id from href */
+        const pageId = clickedElement.getAttribute('href').replace('#', '');
+        /* TODO: activate page */
+        thisApp.activatePage(pageId);
+      });
+    }
+  },
+
+  activatePage: function(pageId)
+  {
+    const thisApp = this;
+
+    for(let link of thisApp.navLinks)
+    {
+      link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
+    }
+
+    for(let page of thisApp.pages)
+    {
+      page.classList.toggle(classNames.nav.active, page.getAttribute('id') == pageId);
+    }
+
+    window.location.hash = '#/' + pageId;
+  },
+
   init: function()
   {
     const thisApp = this;
@@ -69,6 +119,7 @@ const app = {
     thisApp.initData();
     //thisApp.initMenu();
     thisApp.initCart();
+    thisApp.initPages();
   },
 };
 
