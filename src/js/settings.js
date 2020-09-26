@@ -29,7 +29,8 @@ export const select = {
   },
   widgets: {
     amount: {
-      input: 'input.amount', // CODE CHANGED
+      //input: 'input.amount', // CODE CHANGED
+      input: 'input[class="amount"]',
       linkDecrease: 'a[href="#less"]',
       linkIncrease: 'a[href="#more"]',
     },
