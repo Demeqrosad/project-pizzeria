@@ -64,16 +64,15 @@ const app = {
     let pagesMatchingHash = [];
     if(window.location.hash.length > 2)
     {
-      const idFromHash = window.location.hash.replace('#', '').replace('/', '');
+      const idFromHash = window.location.hash.replace('#/', '');
 
       pagesMatchingHash = thisApp.pages.filter(function(page)
       {
         return page.id == idFromHash;
       });
-
     }
 
-    thisApp.activatePage(pagesMatchingHash.length ? pagesMatchingHash[0].id : thisApp[0].id);
+    thisApp.activatePage(pagesMatchingHash.length ? pagesMatchingHash[0].id : thisApp.pages[0].id);
     //thisApp.activatePage(thisApp.pages[0].id);
 
     for(let link of thisApp.navLinks)
