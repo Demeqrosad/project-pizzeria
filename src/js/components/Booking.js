@@ -1,4 +1,4 @@
-import {select, templates, settings} from '../settings.js';
+import {select, templates, settings, classNames} from '../settings.js';
 import {utils} from '../utils.js';
 import {AmountWidget} from './AmountWidget.js';
 import {DatePicker} from './DatePicker.js';
@@ -27,6 +27,7 @@ export class Booking
     thisBooking.dom.hoursAmount = thisBooking.dom.wrapper.querySelector(select.booking.hoursAmount);
     thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
+    thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
   }
 
   initWidgets()
@@ -37,6 +38,10 @@ export class Booking
     thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
     thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
+    thisBooking.dom.wrapper.addEventListener('update', function()
+    {
+      thisBooking.updateDOM();
+    });
   }
 
   getData()
@@ -118,6 +123,7 @@ export class Booking
       }
     }
     console.log('thisBooking.booked: ', thisBooking.booked);
+    thisBooking.updateDOM();
   }
 
   makeBooked(date, hour, duration, table)
@@ -156,6 +162,28 @@ export class Booking
           bookedDetails[startHour].push(table);
         }
         startHour = startHour + settings.hours.interval;
+      }
+    }
+  }
+
+  updateDOM()
+  {
+    const thisBooking = this;
+
+    thisBooking.date = thisBooking.datePicker.value;
+    thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
+    for(let table of thisBooking.dom.tables)
+    {
+      const tableId = parseInt(table.getAttribute(settings.booking.tableIdAttribute));
+      if(thisBooking.booked.hasOwnProperty(thisBooking.date)
+      && thisBooking.booked[thisBooking.date].hasOwnProperty(thisBooking.hour)
+      && thisBooking.booked[thisBooking.date][thisBooking.hour].indexOf(tableId) > -1)
+      {
+        table.classList.add(classNames.booking.tableBooked);
+      }
+      else
+      {
+        table.classList.remove(classNames.booking.tableBooked);
       }
     }
   }

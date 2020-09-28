@@ -13,6 +13,7 @@ export class DatePicker extends BaseWidget
     
     thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.datePicker.input);
     thisWidget.initPlugin();
+    thisWidget.renderValue();
   }
 
   initPlugin()
@@ -44,10 +45,20 @@ export class DatePicker extends BaseWidget
     flatpickr(thisWidget.dom.input, thisWidget.options);
   }
 
+  parseValue(newValue)
+  {
+    return newValue;
+  }
+
+  isValid()
+  {
+    return true;
+  }
+
   renderValue()
   {
-    const thisWidget = this;
+    //const thisWidget = this;
 
-    thisWidget.dom.input = thisWidget.value;
+    //thisWidget.dom.input = thisWidget.value;
   }
 }
