@@ -99,6 +99,7 @@ export const settings = {
   hours: {
     open: 12,
     close: 24,
+    interval: 0.5,
   },
   amountWidget: {
     defaultValue: 1,

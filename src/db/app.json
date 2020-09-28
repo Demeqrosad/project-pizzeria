@@ -206,7 +206,7 @@
   "event": [
     {
       "id": 1,
-      "date": "2019-01-01",
+      "date": "2020-09-28",
       "hour": "12:30",
       "table": 1,
       "repeat": false,
@@ -215,8 +215,18 @@
       "starters": []
     },
     {
+      "id": 6,
+      "date": "2020-09-28",
+      "hour": "14:30",
+      "table": 2,
+      "repeat": false,
+      "duration": 5,
+      "ppl": 3,
+      "starters": []
+    },
+    {
       "id": 2,
-      "date": "2019-01-01",
+      "date": "2020-09-28",
       "hour": "16:00",
       "table": 3,
       "repeat": "daily",
@@ -226,7 +236,7 @@
     },
     {
       "id": 3,
-      "date": "2019-01-01",
+      "date": "2020-10-11",
       "hour": "12:00",
       "table": 3,
       "repeat": "daily",
@@ -236,7 +246,7 @@
     },
     {
       "id": 4,
-      "date": "2019-01-01",
+      "date": "2020-10-11",
       "hour": "13:00",
       "table": 2,
       "repeat": "daily",
@@ -246,7 +256,7 @@
     },
     {
       "id": 5,
-      "date": "2019-01-01",
+      "date": "2020-10-10",
       "hour": "18:00",
       "table": 2,
       "repeat": "daily",
@@ -255,5 +265,16 @@
       "starters": ["lemonWater"]
     }
   ],
-  "booking": []
+  "booking": [
+    {
+      "id": 1,
+      "date": "2020-09-28",
+      "hour": "12:00",
+      "table": 3,
+      "repeat": false,
+      "duration": 2,
+      "ppl": 2,
+      "starters": []
+    }
+  ]
 }
