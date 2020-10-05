@@ -111,8 +111,8 @@ const app = {
   {
     const thisApp = this;
 
-    const bookoingElem = document.querySelector(select.containerOf.booking);
-    thisApp.cart = new Booking(bookoingElem);
+    const bookingElem = document.querySelector(select.containerOf.booking);
+    thisApp.cart = new Booking(bookingElem);
   },
 
   init: function()
