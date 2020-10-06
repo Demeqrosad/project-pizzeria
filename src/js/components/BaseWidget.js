@@ -1,13 +1,13 @@
 export class BaseWidget
 {
-  constructor(wrapperElement, initialValue)
+  constructor(wrapperElement, initialValue, interval)
   {
     const thisWidget = this;
 
     thisWidget.dom = {};
     thisWidget.dom.wrapper = wrapperElement;
     thisWidget.correctValue = initialValue;
-
+    thisWidget.interval = interval;
   }
 
   get value()

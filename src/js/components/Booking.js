@@ -38,7 +38,7 @@ export class Booking
         /* Start reseting all prebookings */
         for(let otherTable of thisBooking.dom.tables)
         {
-          if(otherTable != table)
+          if(otherTable !== table)
           {
             thisBooking.managePrebooking(otherTable, 'reset');
           }
@@ -65,8 +65,8 @@ export class Booking
   {
     const thisBooking = this;
 
-    thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
-    thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
+    thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount, settings.amountWidget.defaultInterval);
+    thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.hours.interval);
     thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
     thisBooking.dom.wrapper.addEventListener('update', function()
@@ -224,7 +224,7 @@ export class Booking
     const thisBooking = this;
     const tableNumber = element.getAttribute(settings.booking.tableIdAttribute);
 
-    if(action == 'toggle')
+    if(action === 'toggle')
     {
       element.classList.toggle(classNames.booking.tablePrebooked);
       if(element.classList.contains(classNames.booking.tablePrebooked))
@@ -238,7 +238,7 @@ export class Booking
       //console.log('Table no. ' + tableNumber + ' was clicked!');
       //console.log('thisBooking.tablesPrebooked: ', thisBooking.tablesPrebooked);
     }
-    else if(action == 'reset')
+    else if(action === 'reset')
     {
       element.classList.remove(classNames.booking.tablePrebooked);
       thisBooking.tablesPrebooked.splice(thisBooking.tablesPrebooked.indexOf(tableNumber), 1);

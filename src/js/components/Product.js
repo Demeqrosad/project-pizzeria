@@ -1,4 +1,4 @@
-import {select, classNames, templates} from '../settings.js';
+import {select, classNames, templates, settings} from '../settings.js';
 import {utils} from '../utils.js';
 import {AmountWidget} from './AmountWidget.js';
 
@@ -112,7 +112,7 @@ export class Product
   {
     const thisProduct = this;
 
-    thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+    thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem, settings.amountWidget.defaultInterval);
     thisProduct.amountWidgetElem.addEventListener('update', function()
     {
       thisProduct.processOrder();

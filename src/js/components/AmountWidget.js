@@ -3,14 +3,15 @@ import {BaseWidget} from './BaseWidget.js';
 
 export class AmountWidget extends BaseWidget
 {
-  constructor(wrapper)
+  constructor(wrapper, interval)
   {
-    super(wrapper, settings.amountWidget.defaultValue);
+    super(wrapper, settings.amountWidget.defaultValue, interval);
 
     const thisWidget = this;
   
     thisWidget.getElements();
     thisWidget.initActions();
+    thisWidget.renderValue();
   }
 
   getElements()
@@ -40,13 +41,13 @@ export class AmountWidget extends BaseWidget
     thisWidget.dom.linkDecrease.addEventListener('click', function(event)
     {
       event.preventDefault();
-      thisWidget.value --;
+      thisWidget.value = thisWidget.value - thisWidget.interval;
     });
 
     thisWidget.dom.linkIncrease.addEventListener('click', function(event)
     {
       event.preventDefault();
-      thisWidget.value ++;
+      thisWidget.value = thisWidget.value + thisWidget.interval;
     });
   }
 
@@ -55,5 +56,10 @@ export class AmountWidget extends BaseWidget
     const thisWidget = this;
 
     thisWidget.dom.input.value = thisWidget.value;
+  }
+
+  parseValue(newValue)
+  {
+    return parseFloat(newValue);
   }
 }

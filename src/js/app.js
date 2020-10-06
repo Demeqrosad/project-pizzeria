@@ -44,12 +44,14 @@ const app = {
     const thisApp = this;
 
     const cartElem = document.querySelector(select.containerOf.cart);
-    thisApp.cart = new Cart(cartElem);
+    app.cart = new Cart(cartElem);
 
     thisApp.productList = document.querySelector(select.containerOf.menu);
 
     thisApp.productList.addEventListener('add-to-cart', function(event)
     {
+      console.log('thisApp.cart: ', thisApp.cart);
+      console.log('event.detail.product: ', event.detail.product);
       app.cart.add(event.detail.product);
     });
   },
@@ -112,7 +114,7 @@ const app = {
     const thisApp = this;
 
     const bookingElem = document.querySelector(select.containerOf.booking);
-    thisApp.cart = new Booking(bookingElem);
+    thisApp.booking = new Booking(bookingElem);
   },
 
   init: function()

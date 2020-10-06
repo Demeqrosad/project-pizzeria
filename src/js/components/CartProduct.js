@@ -1,4 +1,4 @@
-import {select} from '../settings.js';
+import {select, settings} from '../settings.js';
 import {AmountWidget} from './AmountWidget.js';
 
 export class CartProduct
@@ -35,8 +35,9 @@ export class CartProduct
   {
     const thisCartProduct = this;
 
-    thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
-    thisCartProduct.amountWidget.setValue(thisCartProduct.amount);
+    thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget, settings.amountWidget.defaultInterval);
+    console.log('thisCartProduct.amount: ', thisCartProduct.amount);
+    thisCartProduct.amountWidget.value = thisCartProduct.amount;
     thisCartProduct.dom.amountWidget.addEventListener('update', function()
     {
       thisCartProduct.amount = thisCartProduct.amountWidget.value;
