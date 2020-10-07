@@ -1,17 +1,19 @@
-import {select, settings} from '../settings.js';
+import {select} from '../settings.js';
 import {BaseWidget} from './BaseWidget.js';
 
 export class AmountWidget extends BaseWidget
 {
-  constructor(wrapper, interval)
+  constructor(wrapper, initialValue, interval, minValue, maxValue)
   {
-    super(wrapper, settings.amountWidget.defaultValue, interval);
+    super(wrapper, initialValue, interval);
 
     const thisWidget = this;
   
     thisWidget.getElements();
     thisWidget.initActions();
     thisWidget.renderValue();
+    thisWidget.minValue = minValue;
+    thisWidget.maxValue = maxValue;
   }
 
   getElements()
@@ -25,8 +27,10 @@ export class AmountWidget extends BaseWidget
 
   isValid(newValue)
   {
-    return !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin 
-    && newValue <= settings.amountWidget.defaultMax;
+    const thisWidget = this;
+
+    return !isNaN(newValue) && newValue >= thisWidget.minValue 
+    && newValue <= thisWidget.maxValue;
   }
 
   initActions()

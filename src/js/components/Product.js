@@ -112,7 +112,7 @@ export class Product
   {
     const thisProduct = this;
 
-    thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem, settings.amountWidget.defaultInterval);
+    thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem, settings.amountWidget.defaultInterval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
     thisProduct.amountWidgetElem.addEventListener('update', function()
     {
       thisProduct.processOrder();

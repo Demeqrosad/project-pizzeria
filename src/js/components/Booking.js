@@ -65,13 +65,16 @@ export class Booking
   {
     const thisBooking = this;
 
-    thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount, settings.amountWidget.defaultInterval);
-    thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.hours.interval);
+    thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount, settings.amountWidget.defaultValue, settings.amountWidget.defaultInterval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
+    thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.amountWidget.defaultValue, settings.hours.interval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
     thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
     thisBooking.dom.wrapper.addEventListener('update', function()
     {
-      thisBooking.updateDOM();
+      if(event.target !== thisBooking.dom.hoursAmount)
+      {
+        thisBooking.updateDOM();
+      }
     });
   }
 
@@ -235,6 +238,7 @@ export class Booking
       {
         thisBooking.tablesPrebooked.splice(thisBooking.tablesPrebooked.indexOf(tableNumber), 1);
       }
+      thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.amountWidget.defaultValue, settings.hours.interval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
       //console.log('Table no. ' + tableNumber + ' was clicked!');
       //console.log('thisBooking.tablesPrebooked: ', thisBooking.tablesPrebooked);
     }
@@ -242,6 +246,46 @@ export class Booking
     {
       element.classList.remove(classNames.booking.tablePrebooked);
       thisBooking.tablesPrebooked.splice(thisBooking.tablesPrebooked.indexOf(tableNumber), 1);
+      thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.amountWidget.defaultValue, settings.amountWidget.defaultValue, settings.hours.interval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
+    }
+    if(element.classList.contains(classNames.booking.tablePrebooked))
+    {
+      let startHour = utils.hourToNumber(thisBooking.hourPicker.value);
+      if(utils.hourToNumber(thisBooking.hourPicker.value) === 0)
+      {
+        startHour = 24;
+      }
+      let endHour = settings.hours.close;
+      let defaultDuration = settings.hours.interval;
+      let minDuration = settings.hours.interval;
+      let curEndHour = startHour;
+      const date = thisBooking.datePicker.value;
+      const hourInterval = thisBooking.hoursAmount.interval;
+      for(let tablePrebooked of thisBooking.tablesPrebooked)
+      {
+        curEndHour = startHour;
+        for(let i=startHour; i<settings.hours.close; i=i+hourInterval)
+        {
+          if((thisBooking.booked.hasOwnProperty(date)
+          && thisBooking.booked[date].hasOwnProperty(i)
+          && thisBooking.booked[date][i].indexOf(parseInt(tablePrebooked)) > -1))
+          {
+            i=settings.hours.close;
+          }
+          else
+          {
+            curEndHour = i+hourInterval;
+          }
+        }
+        endHour = Math.min(endHour, curEndHour); 
+      }
+      const maxDuration = endHour - startHour;
+      if(maxDuration === 0)
+      {
+        minDuration = 0;
+      }
+      defaultDuration = Math.min(maxDuration, settings.amountWidget.defaultValue);
+      thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, defaultDuration, settings.hours.interval, minDuration, maxDuration);
     }
   }
 
