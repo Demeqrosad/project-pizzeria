@@ -226,7 +226,6 @@ export class Booking
   {
     const thisBooking = this;
     const tableNumber = element.getAttribute(settings.booking.tableIdAttribute);
-
     if(action === 'toggle')
     {
       element.classList.toggle(classNames.booking.tablePrebooked);
@@ -237,16 +236,14 @@ export class Booking
       else
       {
         thisBooking.tablesPrebooked.splice(thisBooking.tablesPrebooked.indexOf(tableNumber), 1);
+        thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.amountWidget.defaultValue, settings.hours.interval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
       }
-      thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.amountWidget.defaultValue, settings.hours.interval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
-      //console.log('Table no. ' + tableNumber + ' was clicked!');
-      //console.log('thisBooking.tablesPrebooked: ', thisBooking.tablesPrebooked);
     }
     else if(action === 'reset')
     {
       element.classList.remove(classNames.booking.tablePrebooked);
       thisBooking.tablesPrebooked.splice(thisBooking.tablesPrebooked.indexOf(tableNumber), 1);
-      thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.amountWidget.defaultValue, settings.amountWidget.defaultValue, settings.hours.interval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
+      thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount, settings.amountWidget.defaultValue, settings.hours.interval, settings.amountWidget.defaultMin, settings.amountWidget.defaultMax);
     }
     if(element.classList.contains(classNames.booking.tablePrebooked))
     {
