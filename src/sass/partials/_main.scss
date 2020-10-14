@@ -1,0 +1,19 @@
+.main-wrapper
+{
+  &.container
+  {
+    background-color: white;
+  }
+}
+
+.card
+{
+  position: relative;
+  height: 200;
+}
+
+.card-body
+{
+  background-color: black;
+  color: white;
+}
